@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
     var instructionIndex = 0
     var memoryPointer = 0
     var loopStartIndex: Int? = null
+    var loopEndIndex: Int? = null
 
     //event loop ? (lol)
     while (instructionIndex < program.size) {
@@ -24,6 +25,12 @@ fun main(args: Array<String>) {
             StartLoop -> {
                 loopStartIndex = instructionIndex
                 if( memory[memoryPointer] == 0x00.toByte() ){
+
+                    if(loopEndIndex != null){
+                        instructionIndex = loopEndIndex
+                        continue
+                    }
+
                     for (le in instructionIndex until program.size){
                         if( program[le] == EndLoop) {
                             instructionIndex = le
@@ -33,12 +40,14 @@ fun main(args: Array<String>) {
                 }
             }
             EndLoop -> {
+                loopEndIndex = instructionIndex
                 if( memory[memoryPointer] != 0x00.toByte() ){
                     instructionIndex = loopStartIndex!!
                     continue
                 }
             }
         }
+
         instructionIndex++
     }
 
