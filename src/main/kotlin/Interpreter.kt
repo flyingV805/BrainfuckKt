@@ -17,13 +17,11 @@ class Interpreter(
                 Increment -> memory[memoryPointer]++
                 Decrement -> memory[memoryPointer]--
                 Output -> print(memory[memoryPointer].toInt().toChar())
-                Input -> {
-                    readlnOrNull()?.first()?.code?.toByte()?.let {
-                        memory[memoryPointer] = it
-                    }
-                }
+                Input -> readlnOrNull()?.first()?.code?.toByte()?.let { memory[memoryPointer] = it }
                 StartLoop -> {
                     loopStartIndex = instructionIndex
+
+                    // time to break that loop ?
                     if( memory[memoryPointer] == 0x00.toByte() ){
 
                         //have loop end index, no need to search
@@ -32,13 +30,14 @@ class Interpreter(
                             continue
                         }
 
-                        //have loop end index, no need to search
+                        //don't have loop end index, time to find it
                         for (le in instructionIndex until program.size){
                             if( program[le] == EndLoop) {
                                 instructionIndex = le
                                 continue
                             }
                         }
+
                     }
                 }
                 EndLoop -> {
