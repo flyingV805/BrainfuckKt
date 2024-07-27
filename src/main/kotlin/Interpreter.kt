@@ -11,6 +11,8 @@ class Interpreter(
     fun run(){
 
         while (instructionIndex < program.size) {
+            // println("CURRENT INSTRUCTION: ${program[instructionIndex]}")
+            println("memory: ${memory.joinToString(separator = "-")}")
             when(program[instructionIndex]){
                 Forward -> memoryPointer++
                 Backward -> memoryPointer--
